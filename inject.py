@@ -24,3 +24,14 @@ inject(str, name='up')(lambda self: self.upper())
 
 print 'test'.up()
 
+# for fun, let's add an extend method to {}
+
+@inject(dict)
+def extend(self, new_dict):
+    return dict(self, **new_dict)
+
+print {'a':2}.extend({'b':3})
+
+
+
+
