@@ -1,4 +1,4 @@
-def inject(cls, static=False, name=None):
+def inject(cls, wrapper=lambda x: x, name=None):
     def _builtin_hack(name):
         import ctypes as c
 
@@ -10,7 +10,8 @@ def inject(cls, static=False, name=None):
 
     def wrap(method):
         name_ = name or method.func_name
-        method = staticmethod(method) if static else method
+        method = wrapper(method)
+
         try:
             setattr(cls, name_, method)
         except:
@@ -32,6 +33,18 @@ def extend(self, new_dict):
 
 print {'a':2}.extend({'b':3})
 
+# maybe a static method:
+
+@inject(dict, wrapper=staticmethod)
+def blehstatic():
+    return 'T_T'
+
+print dict.blehstatic()
 
 
+# maybe a class method
+@inject(dict, wrapper=classmethod)
+def blehclass(cls):
+    return ':) %s' % cls
 
+print dict.blehclass()
